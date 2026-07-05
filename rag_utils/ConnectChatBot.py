@@ -88,4 +88,4 @@ def ConnectChatBot(question, knowledgeBaseData):
         return output
 
     except Exception as e:
-        return f"Error: {str(e)}"
+        return None

@@ -1,4 +1,4 @@
-from rag import rag
+from rag_utils.ragController import rag
 
 def ragController(Question):
     try:

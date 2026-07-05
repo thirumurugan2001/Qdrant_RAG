@@ -10,24 +10,23 @@ def rag(Question):
     try:
         client=Dbconnection()
         embedding = get_embedding(Question)
-        top_matches = client.query_points(
-            collection_name=config["qdrant"]["collection_name"],
-            query=embedding[0],
-
-            limit=3)
+        top_matches = client.query_points(collection_name=config["qdrant"]["collection_name"],query=embedding[0],limit=2)
         texts = []
         for hit in top_matches.points:
             texts.append(hit.payload["text"])
-
-        context = "\n\n".join(texts)
-
+        context = "\n".join(texts)
         response = ConnectChatBot(Question,context)
-        print(response)
+        if response is None:
+            return {
+                "statusCode":200,
+                "status":False,
+                "message":"No relevant information found in the database.",
+            }
         return {
             "statusCode":200,
-            "status":False,
-            "message":"No relevant information found in the database.",
-
+            "status":True,
+            "message":"Relevant information found.",
+            "response":response
         }
     except Exception as e:
         print(f"Error in rag function: {str(e)}")
