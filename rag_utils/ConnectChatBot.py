@@ -8,7 +8,7 @@ load_dotenv()
 llm = ChatOpenAI(
     model=os.getenv("MODEL"),
     temperature=0,
-    openai_api_key=os.getenv("OPEN_API_KEY"),
+    openai_api_key=os.getenv("OPEN_API_KEY"),   
     openai_api_base=os.getenv("API_BASE_URL"))
 memory = ConversationSummaryMemory(llm=llm)
 

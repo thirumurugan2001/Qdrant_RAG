@@ -19,5 +19,3 @@ def get_embedding(text):
     except Exception as e:
         print("Error in getting embedding: ", str(e))
         return None
-
-print(get_embedding("Hello, how are you?"))

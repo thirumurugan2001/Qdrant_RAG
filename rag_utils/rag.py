@@ -1,10 +1,11 @@
 from rag_utils import get_embedding
 from ConnectChatBot import ConnectChatBot
+from rag_utils.dbConnection import Dbconnection
 
 # Function to get the most relevant answer from the database
 def rag(Question):
     try:
-        conn=dbconnection()
+        conn=Dbconnection()
         cursor=conn.cursor()
         embedding = get_embedding(Question)
         select_query = """SELECT description, dot_product(vector, JSON_ARRAY_PACK("{0}")) AS score FROM About ORDER BY score DESC LIMIT 2 """.format(embedding)
