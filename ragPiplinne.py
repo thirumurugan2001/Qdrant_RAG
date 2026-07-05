@@ -63,6 +63,7 @@ def Create_rag_pipeline():
                 "Status": False
             }
         print("RAG pipeline created successfully.")
+    
     except Exception as e:
         print(f"Error in Create_rag_pipeline: {str(e)}")
         return {
