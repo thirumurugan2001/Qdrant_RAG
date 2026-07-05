@@ -1,6 +1,6 @@
 from xmlrpc import client
 from rag_utils.embedding import get_embedding
-from ConnectChatBot import ConnectChatBot
+from rag_utils.ConnectChatBot import ConnectChatBot
 from rag_utils.dbConnection import Dbconnection
 from Config.loadConfig import load_config
 config = load_config()
@@ -10,7 +10,7 @@ def rag(Question):
     try:
         client=Dbconnection()
         embedding = get_embedding(Question)
-        top_matches = client.query_points(collection_name=config["qdrant"]["collection_name"],query=embedding[0],limit=2)
+        top_matches = client.query_points(collection_name=config["qdrant"]["collection_name"],query=embedding,limit=2)
         texts = []
         for hit in top_matches.points:
             texts.append(hit.payload["text"])

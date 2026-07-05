@@ -85,6 +85,8 @@ def ConnectChatBot(question, knowledgeBaseData):
                 {"input": question},
                 {"output": output}
             )
+       
         return output
     except Exception as e:
+        print(f"Error in ConnectChatBot function: {str(e)}")
         return None
