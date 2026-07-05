@@ -11,6 +11,7 @@ def setup_collection(client, collection_name, vector_size):
                 distance=Distance.COSINE
             )
         )
+        print(f"Collection '{collection_name}' has been set up successfully.")
         return True
     except Exception as e:
         print(f"Error in setting up collection: {str(e)}")
@@ -18,15 +19,18 @@ def setup_collection(client, collection_name, vector_size):
     
 def ingest_chunks(client, collection_name, chunks):
     try :
+        print(f"Ingesting {len(chunks)} chunks into collection '{collection_name}'...")
         points = []
         for chunk in chunks:
+            embedding = get_embedding(chunk)
             points.append(
                 PointStruct(
                     id=str(uuid.uuid4()), 
-                    vector=get_embedding(chunk), 
+                    vector=embedding, 
                     payload={"text": chunk}  
                 )
             )
+            print("Chunk are ready to push to Qdrant.")        
         client.upsert(
             collection_name=collection_name,
             points=points

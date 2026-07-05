@@ -4,10 +4,11 @@ from ConnectChatBot import ConnectChatBot
 from rag_utils.dbConnection import Dbconnection
 from Config.loadConfig import load_config
 config = load_config()
+
 # Function to get the most relevant answer from the database
 def rag(Question):
     try:
-        conn=Dbconnection()
+        client=Dbconnection()
         embedding = get_embedding(Question)
         top_matches = client.query_points(
             collection_name=config["qdrant"]["collection_name"],

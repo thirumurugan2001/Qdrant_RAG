@@ -1,6 +1,7 @@
+from pathlib import Path
 import yaml
 
 def load_config():
-    with open(r"C:\Users\intel\OneDrive\Desktop\Studies\Qdrant_RAG\Config\config.yaml", "r") as f:
-        config = yaml.safe_load(f)
-    return config
+    config_path = Path(__file__).parent / "config.yaml"
+    with config_path.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)

@@ -219,3 +219,4 @@ __marimo__/
 
 Custom additions to .gitignore
 config.yaml
+qdrant_storage

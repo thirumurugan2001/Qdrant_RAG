@@ -1,6 +1,5 @@
 from rag import rag
 
-# This AzureOpenAIController function is use to Validate the payload data["prompt"] is not empty and string format.
 def ragController(Question):
     try:
         if Question != "":
