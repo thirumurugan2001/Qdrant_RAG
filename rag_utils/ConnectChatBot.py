@@ -3,13 +3,15 @@ from openai import OpenAI
 from langchain.memory import ConversationSummaryMemory
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+from Config.loadConfig import load_config
+config = load_config()
 load_dotenv()
 
 llm = ChatOpenAI(
-    model=os.getenv("MODEL"),
-    temperature=0,
+    model=config['OPEN_AI']['MODEL'],
+    temperature=0.3,
     openai_api_key=os.getenv("OPEN_API_KEY"),   
-    openai_api_base=os.getenv("API_BASE_URL"))
+    openai_api_base=config['OPEN_AI']['API_BASE_URL'])
 memory = ConversationSummaryMemory(llm=llm)
 
 def ConnectChatBot(Question, knowledgeBaseData):
@@ -17,7 +19,7 @@ def ConnectChatBot(Question, knowledgeBaseData):
         chat_history = memory.load_memory_variables({})
         history_text = chat_history.get("history", "")        
         client = OpenAI(
-            base_url=os.getenv("API_BASE_URL"),
+            base_url=config['OPEN_AI']['API_BASE_URL'],
             api_key=os.getenv("OPEN_API_KEY"),
         )        
         system_content = """You are Thirumurugan Subramaniyan, a helpful AI assistant representing the professional profile of Thirumurugan Subramaniyan.
@@ -96,7 +98,7 @@ def ConnectChatBot(Question, knowledgeBaseData):
                     "content": user_content, 
                 }
             ],
-            model=os.getenv("MODEL"),
+            model=config['OPEN_AI']['MODEL'],
             temperature=0.3,
             max_tokens=4096,
             top_p=0.9

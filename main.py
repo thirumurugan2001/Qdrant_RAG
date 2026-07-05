@@ -7,14 +7,8 @@ app = FastAPI()
 async def rag(item: RAG):
     try:
         response = middleware(item.Question)
-        # Step 5 - Querying the collection  
-        # question = input("\nEnter your question about the document: ")
-        # query_vector = get_embedding([question], config["ollama"]["embedding_model"])
 
-        # top_matches = client.query_points(
-        #     collection_name=config["qdrant"]["collection_name"],
-        #     query=query_vector[0],
-        #     limit=3)
+        
         
         # texts = []
         # for hit in top_matches.points:

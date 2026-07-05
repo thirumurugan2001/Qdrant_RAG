@@ -1,9 +1,10 @@
 from pypdf import PdfReader
-PDF_PATH = "hr_policy_detailed_5_pages.pdf"
+from Config.loadConfig import load_config
+config = load_config()
 
 def load_pdf() -> str:
     try:
-        reader = PdfReader(PDF_PATH)
+        reader = PdfReader(config['document']['pdf_path'])
         text = ""
         for page in reader.pages:
             text += page.extract_text() + "\n"

@@ -1,33 +1,33 @@
-from rag_utils import get_embedding
+from xmlrpc import client
+from rag_utils.embedding import get_embedding
 from ConnectChatBot import ConnectChatBot
 from rag_utils.dbConnection import Dbconnection
-
+from Config.loadConfig import load_config
+config = load_config()
 # Function to get the most relevant answer from the database
 def rag(Question):
     try:
         conn=Dbconnection()
-        cursor=conn.cursor()
         embedding = get_embedding(Question)
-        select_query = """SELECT description, dot_product(vector, JSON_ARRAY_PACK("{0}")) AS score FROM About ORDER BY score DESC LIMIT 2 """.format(embedding)
-        cursor.execute(select_query) 
-        rows = cursor.fetchall() 
-        conn.close()
-        knowledgeBaseData=f"{rows[0][0]} and {rows[1][0]}"
-        if rows:
-            response = ConnectChatBot(Question,knowledgeBaseData)
-            return {
-                "data":response,
-                "statusCode":200,
-                "message":"Success",
-                "Status":True
-            }
-        else:
-            return {
-                "statusCode":200,
-                "status":False,
-                "message":"No relevant information found in the database.",
+        top_matches = client.query_points(
+            collection_name=config["qdrant"]["collection_name"],
+            query=embedding[0],
 
-            }
+            limit=3)
+        texts = []
+        for hit in top_matches.points:
+            texts.append(hit.payload["text"])
+
+        context = "\n\n".join(texts)
+
+        response = ConnectChatBot(Question,context)
+        print(response)
+        return {
+            "statusCode":200,
+            "status":False,
+            "message":"No relevant information found in the database.",
+
+        }
     except Exception as e:
         print(f"Error in rag function: {str(e)}")
         return {
