@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from model import *
+from rag_utils.model import RAG
 from rag_utils.controller import ragController
 app = FastAPI()
 
