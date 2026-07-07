@@ -7,6 +7,7 @@ from Config.loadConfig import load_config
 config = load_config()
 load_dotenv()
 
+# Initialize the ChatOpenAI model and ConversationSummaryMemory
 llm = ChatOpenAI(
     model=config['OPEN_AI']['MODEL'],
     temperature=0.3,
@@ -14,14 +15,19 @@ llm = ChatOpenAI(
     openai_api_base=config['OPEN_AI']['API_BASE_URL'])
 memory = ConversationSummaryMemory(llm=llm)
 
+# Function to connect to the chatbot and get a response based on the question and knowledge base data
 def ConnectChatBot(question, knowledgeBaseData):
     try:
         chat_history = memory.load_memory_variables({})
         history_text = chat_history.get("history", "")
+
+        # Initialize the OpenAI client with the specified base URL and API key
         client = OpenAI(
             base_url=config['OPEN_AI']['API_BASE_URL'],
             api_key=os.getenv("OPEN_API_KEY"),
         )
+
+        # Define the system content with rules and instructions for the chatbot, including the HR Policy document and conversation history
         system_content = f"""
                 You are an intelligent HR Policy Assistant.
                 Your primary responsibility is to answer employee questions using ONLY the provided HR Policy document.
@@ -51,6 +57,8 @@ def ConnectChatBot(question, knowledgeBaseData):
                 Conversation Summary
                 {history_text}
             """
+        
+        # Define the user content with the employee's question and instructions for the chatbot to follow
         user_content = f"""
             Employee Question:
             {question}
@@ -63,6 +71,8 @@ def ConnectChatBot(question, knowledgeBaseData):
             - Use bullet points whenever possible.
             - Keep the response professional and concise.
             """
+        
+        # Send the system and user content to the OpenAI API to generate a response based on the HR Policy document and conversation history
         response = client.chat.completions.create(
             model=config['OPEN_AI']['MODEL'],
             messages=[
@@ -80,6 +90,8 @@ def ConnectChatBot(question, knowledgeBaseData):
             max_tokens=4096
         )
         output = response.choices[0].message.content.strip()
+        
+        # Save the conversation context only if the output does not indicate that the question is unrelated to the HR Policy document
         if ("I can only assist with questions related to the HR Policy document."not in output):
             memory.save_context(
                 {"input": question},

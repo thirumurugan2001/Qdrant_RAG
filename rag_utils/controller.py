@@ -1,7 +1,9 @@
 from rag_utils.ragController import rag
 
+# Controller function to handle the RAG process based on the provided question
 def ragController(Question):
     try:
+        # Check if the provided question is not empty before proceeding with the RAG process
         if Question != "":
             return rag(Question)
         else:

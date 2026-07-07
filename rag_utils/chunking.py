@@ -1,6 +1,9 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# Function to chunk text into smaller pieces
 def chunk_text(text):
     try :
+        # Create a RecursiveCharacterTextSplitter instance with specified chunk size and overlap 
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=500,
             chunk_overlap=100
